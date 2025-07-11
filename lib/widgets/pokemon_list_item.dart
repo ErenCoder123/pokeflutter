@@ -21,11 +21,10 @@ class PokemonListItem extends StatelessWidget {
       title: Text(capitalize(pokemon.name)),
       subtitle: Text('ID: ${pokemon.id}'),
       onTap: () {
-        // Navegação para a tela de detalhes
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailsScreen(pokemonUrl: pokemon.url),
+            builder: (context) => PokemonDetailsScreen(pokemon: pokemon)
           ),
         );
       },

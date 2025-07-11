@@ -1,82 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:pokeflutter2/models/pokemon.dart';
+import '../models/pokemon.dart';
 
-class DetailsScreen extends StatefulWidget {
-  final String pokemonUrl;
+class PokemonDetailsScreen extends StatelessWidget {
+  final Pokemon pokemon;
 
-  const DetailsScreen({super.key, required this.pokemonUrl});
-
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-  late Future<PokemonDetails> _detailsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _detailsFuture = _fetchPokemonDetails();
-  }
-
-  Future<PokemonDetails> _fetchPokemonDetails() async {
-    final response = await http.get(Uri.parse(widget.pokemonUrl));
-    if (response.statusCode == 200) {
-      return PokemonDetails.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Falha ao carregar detalhes do Pokémon');
-    }
-  }
-
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  const PokemonDetailsScreen({super.key, required this.pokemon});
 
   @override
   Widget build(BuildContext context) {
+    String pokemonName = pokemon.name[0].toUpperCase() + pokemon.name.substring(1);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhes'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        title: Text(pokemonName),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: FutureBuilder<PokemonDetails>(
-        future: _detailsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final details = snapshot.data!;
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      details.imageUrl,
-                      height: 200,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      capitalize(details.name),
-                      style: const TextStyle(
-                          fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 20),
-                    Text('Altura: ${details.height / 10} m', style: const TextStyle(fontSize: 18)),
-                    const SizedBox(height: 8),
-                    Text('Peso: ${details.weight / 10} kg', style: const TextStyle(fontSize: 18)),
-                  ],
-                ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Hero(
+              tag: pokemon.id,
+              child: Image.network(
+                pokemon.imageUrl,
+                height: 250,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error, size: 100);
+                },
               ),
-            );
-          }
-          return const Center(child: Text('Nenhum detalhe encontrado.'));
-        },
+            ),
+            const SizedBox(height: 20),
+            Text(
+              pokemonName,
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Nº ${pokemon.id}',
+              style: const TextStyle(fontSize: 20, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }

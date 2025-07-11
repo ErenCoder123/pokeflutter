@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "368429542379",
+    "project_id": "pokeflutter-269c9",
+    "storage_bucket": "pokeflutter-269c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368429542379:android:2201de93c2c7f07043c7ae",
+        "android_client_info": {
+          "package_name": "com.poke2.pokeflutter2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC4DYXrpTnIZL_PGB59btPt5QpYo3oDTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
